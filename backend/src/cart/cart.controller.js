@@ -3,7 +3,8 @@ import { addToCartService, getCartService, updateCartService } from "./cart.serv
 
 export const addToCart = async (req, res) => {
      try {
-        const {product, quantity, price} = req.body;
+        const product = req.params.id
+        const {quantity, price} = req.body;
         if(!req.user) {
             return res.status(401).json({message: "log in first to add an item to the cart!"});
         }

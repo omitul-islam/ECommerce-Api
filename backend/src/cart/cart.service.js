@@ -6,11 +6,10 @@ export const addToCartService = async (userId, productId, quantity) => {
     console.log(product.stock);
     console.log(quantity);
     if(product.stock < quantity) {
-        return null
+        return null;
     }
     const price = product.price;
     let cart = await cartModel.findOne({user: userId});
-
 
     if(!cart){
         cart = new cartModel({ 
