@@ -6,7 +6,7 @@ const route = express.Router();
 
 route.post('/products',upload.single('image'),createProduct); 
 route.get('/products',getAllProducts);
-route.put('/products/:id',updateProduct);
+route.put('/products/:id',upload.single('image'),updateProduct);
 route.delete('/products/:id',deleteProduct);
 
 export const productRoutes = route;
