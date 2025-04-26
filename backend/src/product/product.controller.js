@@ -10,8 +10,14 @@ export const createProduct = async (req, res) => {
             console.log(existingProduct);
             return res.status(400).json({ message: "Product already exists" });
         }
+        req.body.price = parseFloat(req.body.price);
+        req.body.stock = parseFloat(req.body.stock);
         const parseData = validationProduct.createProductSchema.parse(req.body);
-        const { name, price, category, stock, image } = parseData;
+        
+        const { name, price, category, stock } = parseData;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+
         const newProduct = await CreateProductService({ name, price, category, stock, image });
         res.status(201).json({ message: "Product created successfully", product: newProduct });
     } catch (error) {
