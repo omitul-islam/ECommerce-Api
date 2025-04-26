@@ -1,4 +1,5 @@
 import userModel from "../auth/auth.model.js";
+import { orderModel } from "../order/order.model.js";
 
 
 export const deleteUserService = async (id) => {
@@ -20,7 +21,7 @@ export const updateUserService = async(userId, updateFields) =>{
     if(role !== undefined) {
         user.role = role;
     }
-    return await user.save()
+    return await user.save();
 }
 
 export const getUsersService = async () => {
@@ -29,4 +30,23 @@ export const getUsersService = async () => {
 
 export const getUserByIdService = async (id) => {
     return await userModel.findById(id).select('-password');
+}
+
+
+export const getOrdersService = async () => {
+    const orders = await orderModel.find({}).populate('user', 'username email').populate('products');
+    return orders;
+}
+
+export const updateOrdersService = async (orderId, updateField) => {
+    const order = await orderModel.findById(orderId);
+    if(!order) return null;
+    order.status = updateField.status;
+    return await order.save();
+}
+
+export const deleteOrderService = async (orderId) => {
+    const order = await orderModel.findById(orderId);
+    if(!order) return null;
+    return await orderModel.findByIdAndDelete(orderId);
 }

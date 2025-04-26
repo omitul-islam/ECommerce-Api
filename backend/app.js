@@ -15,6 +15,7 @@ app.use('/api/v1',authenticateUser,orderRoutes);
 app.use('/api/cart',authenticateUser,cartRoutes);
 app.use('/api',authenticateUser, isAdmin,productRoutes);
 app.use('/api/admin',authenticateUser, isAdmin,adminRoutes);
+app.use('/api/admin/v1',authenticateUser, isAdmin,adminRoutes);
 
 app.get('/',(req, res)=> {
     res.send('Api is working!');

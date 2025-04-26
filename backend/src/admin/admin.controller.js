@@ -1,4 +1,4 @@
-import { deleteUserService, getUserByIdService, getUsersService, updateUserService } from "./admin.service.js";
+import { deleteOrderService, deleteUserService, getOrdersService, getUserByIdService, getUsersService, updateOrdersService, updateUserService } from "./admin.service.js";
 
 export const deleteUser = async(req, res) => {
     try {
@@ -37,7 +37,7 @@ export const getUsers = async(req, res) => {
           if(!users || users.length === 0) {
               return res.status(404).json({message: "No users found!"});
           }
-          return res.status(200).json({message: "All the users are fetched successfully!", users});
+          return res.status(200).json({message: "All the users are fetched successfully!", Users:users});
      } catch (error) {
           return res.status(500).json({message: "Error fetching users", error: error.message});
      }
@@ -50,8 +50,47 @@ export const getUserById = async(req,res) => {
       if(!user) {
           return res.status(404).json({message: "User not found!"});
       }
-      return res.status(200).json({message: "User found successfully!", user});
+      return res.status(200).json({message: "User found successfully!", User:user});
   } catch (error) {
       return res.status(500).json({message: "Error fetching user", error: error.message});
   }
+}
+
+export const updateOrders = async(req,res) => {
+    try {
+       const updateField = req.body;
+       const orderId = req.params.id;
+       const updatedOrder = await updateOrdersService(orderId, updateField);
+       if(!updatedOrder) {
+          return res.status(404).json({message: "Order not found!"});
+       }
+       return res.status(200).json({message: "Order updated successfully!", updatedOrders:updatedOrder});
+    } catch (error) {
+      return res.status(500).json({message: "Error updating orders", error: error.message});   
+    }
+}
+
+export const getOrders = async(req,res) => {
+    try {
+        const orders = await getOrdersService();
+        if(!orders) {
+            return res.status(404).json({message: "No orders found!"});
+        }
+        return res.status(200).json({message: "Orders fetched successfully!",Orders: orders}); 
+    } catch (error) {
+      return res.status(500).json({message: "Error fetching orders", error: error.message});  
+    }
+}
+
+export const deleteOrder = async(req,res) => {
+    try {
+        const orderId = req.params.id;
+        const deleteOrder = await deleteOrderService(orderId);
+        if(!deleteOrder) {
+        return res.status(404).json({message: "Order not found!"});
+        }
+        return res.status(200).json({message: "Order deleted successfully!", deletedOrder: deleteOrder});
+    } catch (error) {
+        return res.status(500).json({message: "Error deleting order", error: error.message});
+    }
 }
