@@ -37,11 +37,12 @@ export const getAllProducts = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         const id = req.params.id;
-        const parseData = validationProduct.updateProductSchema.parse(req.body);
         if(req.body.price)
-        req.body.price = parseFloat(req.body.price);
+            req.body.price = parseFloat(req.body.price);
         if(req.body.stock)
         req.body.stock = parseFloat(req.body.stock);
+        const parseData = validationProduct.updateProductSchema.parse(req.body);
+      
         const { name, price, category, stock} = parseData;
         
         const image = req.file ? `/uploads/${req.file.filename}` : null;
