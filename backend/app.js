@@ -6,9 +6,18 @@ import { isAdmin } from './src/utils/isAdmin.js';
 import { cartRoutes } from './src/cart/cart.route.js';
 import { orderRoutes } from './src/order/order.route.js';
 import { adminRoutes } from './src/admin/admin.route.js';
-const app = express();
+import cors from 'cors';
+import path from 'path';
 
+const app = express();
 app.use(express.json());
+const uploadsPath = path.resolve('src/uploads');
+app.use('/uploads', express.static(uploadsPath));
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+}))
 
 app.use('/api/auth',authRoutes);
 app.use('/api/v1',authenticateUser,orderRoutes);

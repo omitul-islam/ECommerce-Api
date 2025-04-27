@@ -1,43 +1,47 @@
 import productModel from "../product/product.model.js";
 import { cartModel } from "./cart.model.js";
 
-export const addToCartService = async (userId, productId, quantity) => {
+export const addToCartService = async (userId, productId) => {
     const product = await productModel.findById(productId);
-    console.log(product.stock);
-    console.log(quantity);
-    if(product.stock < quantity) {
-        return null;
+    if (!product) {
+      throw new Error("Product not found");
     }
+  
     const price = product.price;
-    let cart = await cartModel.findOne({user: userId});
-
-    if(!cart){
-        cart = new cartModel({ 
-            user: userId,
-            items:[{
-                product: productId,
-                quantity: quantity,
-                price: price,
-            }],
-            totalAmount: quantity * price,
-         });
+    let cart = await cartModel.findOne({ user: userId });
+  
+    if (!cart) {
+      cart = new cartModel({
+        user: userId,
+        items: [{
+          product: productId,
+          quantity: 1,
+          price: price,
+        }],
+        totalAmount: price,
+      });
     } else {
-        const itemIndex = cart.items.findIndex(item => item.product.toString() === productId.toString());
-        if(itemIndex > -1) {
-            cart.items[itemIndex].quantity += quantity;
-            cart.totalAmount += quantity * price;
-        } else {
-            cart.items.push({
-                product: productId,
-                quantity: quantity,
-                price: price
-            });
-            cart.totalAmount = quantity * price;
-        }
+      const itemIndex = cart.items.findIndex(item => item.product.toString() === productId.toString());
+  
+      if (itemIndex > -1) {
+        cart.items[itemIndex].quantity += 1;
+        cart.items[itemIndex].price = price * cart.items[itemIndex].quantity;
+        cart.totalAmount += price;
+      } else {
+        cart.items.push({
+          product: productId,
+          quantity: 1,
+          price: price,
+        });
+        cart.totalAmount += price;
+      }
     }
+  
     await cart.save();
     return cart;
-}
+  };
+  
+  
 
 
 export const getCartService = async (userId) => {
