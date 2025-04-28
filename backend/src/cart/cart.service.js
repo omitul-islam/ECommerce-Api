@@ -71,3 +71,11 @@ export const updateCartService = async (userId, productId, quantity) => {
     return cart;
 }
 
+export const clearCartService = async(userId) => {
+    const cart = cartModel.findOneAndDelete({user:userId});
+    if(!cart) {
+      return null;
+    }
+    return cart;
+}
+

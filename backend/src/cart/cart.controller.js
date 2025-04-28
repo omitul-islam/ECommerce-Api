@@ -1,4 +1,4 @@
-import { addToCartService, getCartService, updateCartService } from "./cart.service.js";
+import { addToCartService, clearCartService, getCartService, updateCartService } from "./cart.service.js";
 
 
 export const addToCart = async (req, res) => {
@@ -53,3 +53,19 @@ export const getCart = async (req, res) => {
         return res.status(500).json({ message: "Error updating cart", error: error.message });  
         }
 }
+
+export const clearCart = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const result = await clearCartService(userId);
+
+    if (!result) {
+      return res.status(404).json({ message: "Cart is already empty." });
+    }
+
+    return res.status(200).json({ message: "Cart cleared successfully." });
+  } catch (error) {
+    return res.status(500).json({ message: "Error clearing cart", error: error.message });
+  }
+};
+
