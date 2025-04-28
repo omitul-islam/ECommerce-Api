@@ -20,9 +20,9 @@ app.use(cors({
 }))
 
 app.use('/api/auth',authRoutes);
+app.use('/api',productRoutes);
 app.use('/api/v1',authenticateUser,orderRoutes);
 app.use('/api/cart',authenticateUser,cartRoutes);
-app.use('/api',authenticateUser, isAdmin,productRoutes);
 app.use('/api/admin',authenticateUser, isAdmin,adminRoutes);
 app.use('/api/admin/v1',authenticateUser, isAdmin,adminRoutes);
 
