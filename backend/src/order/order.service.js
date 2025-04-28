@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { cartModel } from "../cart/cart.model.js";
 import productModel from "../product/product.model.js";
 import { orderModel } from "./order.model.js";
@@ -9,27 +10,31 @@ export const createOrderService = async(userId, address) => {
         return null;
     }
 
-    console.log("CART",cart);
     const products = cart.items.map(item => item.product);
+    const productIds = products.map(product => ({
+        productId: new mongoose.Types.ObjectId(product._id),
+        quantity: cart.items.find(item => item.product._id.toString() === product._id.toString()).quantity,
+        price:cart.items.find(item => item.product._id.toString() === product._id.toString()).price
+    }));
 
     const totalAmount = cart.totalAmount;
-    console.log(products);
+
     const order = new orderModel({
         user: userId,
-        products: products,
+        products: productIds,
         totalAmount: totalAmount,
         address: address,
         status: "pending",
-    })
+    });
 
     for(const item of cart.items) {
-        const product = await productModel.findById(item.product);
+        const product = await productModel.findById(item.product._id);
         if(product) {
             product.stock -= item.quantity;
             await product.save();
         }
     }
-    
+
     await order.save();
     await cartModel.findByIdAndDelete(cart._id);
     return order;
