@@ -14,13 +14,14 @@ export const authenticateUser = async (req, res, next) => {
 
        try {
               const decoded = jwt.verify(token, process.env.JWT_SECRET);
-              console.log(decoded);
+              console.log("decoded",decoded);
               const user = await userModel.findOne({email: decoded.email}).select('-password');
               
               if(!user) {
                 return res.status(401).json({ message: 'Unauthorized User!' });
               }
               req.user = user;
+              console.log(req.token)
               next();
        } catch (error) {
               return res.status(401).json({ message: 'Unauthorized User!' });

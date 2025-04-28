@@ -76,7 +76,7 @@ export const getOrders = async(req,res) => {
         if(!orders) {
             return res.status(404).json({message: "No orders found!"});
         }
-        return res.status(200).json({message: "Orders fetched successfully!",Orders: orders}); 
+        return res.status(200).json({message: "Orders fetched successfully!",orders: orders}); 
     } catch (error) {
       return res.status(500).json({message: "Error fetching orders", error: error.message});  
     }

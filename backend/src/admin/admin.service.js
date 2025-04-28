@@ -34,7 +34,7 @@ export const getUserByIdService = async (id) => {
 
 
 export const getOrdersService = async () => {
-    const orders = await orderModel.find({}).populate('user', 'username email').populate('products');
+    const orders = await orderModel.find({}).populate('user', 'username email').populate('products.productId');
     return orders;
 }
 

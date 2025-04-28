@@ -4,8 +4,8 @@ const route = express.Router();
 
 
 route.delete('/users/:id',deleteUser);
-route.get('/users',getUsers)
-route.get('/users/:id',getUserById)
+route.get('/users',getUsers);
+route.get('/users/:id',getUserById);
 route.put('/users/:id',updateUser);
 
 

@@ -20,7 +20,8 @@ export const createOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
       try {
-        const orders = await getOrdersService();
+        const userId = req.user.id;
+        const orders = await getOrdersService(userId);
         if(!orders) {
             res.status(404).json({message: "No orders found!"});
         }
