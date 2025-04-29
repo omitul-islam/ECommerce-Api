@@ -21,7 +21,7 @@ export const updateProductService = async (id, { name, price, category, stock, i
        if(price !== undefined )product.price = price;
        if(category !== undefined)product.category = category;
        if(stock !== undefined)product.stock = stock;
-       if(image !== undefined)product.image = image;
+       if(image !== null)product.image = image;
        console.log(product);
        
        await product.save();
