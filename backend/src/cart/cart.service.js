@@ -68,8 +68,7 @@ export const updateCartService = async (userId, productId, quantity) => {
     }, 0);
 
     await cart.save();
-    const updatedCart = await cartModel.findOne({ user: userId }).populate("items.product");
-    return updatedCart;
+    return cart;
 }
 
 export const clearCartService = async(userId) => {
